@@ -16,6 +16,8 @@ app.use('/api/posts',posts);
 
 db.once('open', function() {
     console.log('connected to db')
+},(err)=>{
+    console.log(err)
 });
 
 
