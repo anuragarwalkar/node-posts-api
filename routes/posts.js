@@ -30,12 +30,16 @@ router.get('/',async (req,res)=>{
 });
 
 router.post('/',multer({storage:imgStorage}).single('image'),async(req,res)=>{
-    const url = `${req.protocol}://${req.get('host')}`
-    const newPost = new Post({
+    const url = `${req.protocol}://${req.get('host')}`;
+    let postObj = {
         title:req.body.title,
         description:req.body.description,
-        imagePath:`${url}/images/${req.file.filename}`
-    })
+    }
+    if(req.file){
+        postObj.imagePath = req.file != undefined ?`${url}/images/${req.file.filename}`:null
+
+    }
+    const newPost = new Post(postObj)
     const dbCourse = await newPost.save()
     res.send(dbCourse);
 });
