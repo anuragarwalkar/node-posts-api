@@ -18,7 +18,7 @@ const imgStorage = multer.diskStorage({
         cb(err,'./images')
     },
     filename:(req,file,cb)=>{
-        const name = file.originalname.toLowerCase();
+        const name = file.originalname.toLowerCase().split(' ').join('-');
         const ext = MIME_TYPE_MAP[file.mimetype];
         cb(null,`${name}-${Date.now()}.${ext}`)
     }
@@ -30,9 +30,11 @@ router.get('/',async (req,res)=>{
 });
 
 router.post('/',multer({storage:imgStorage}).single('image'),async(req,res)=>{
+    const url = `${req.protocol}://${req.get('host')}`
     const newPost = new Post({
         title:req.body.title,
-        description:req.body.description
+        description:req.body.description,
+        imagePath:`${url}/images/${req.file.filename}`
     })
     const dbCourse = await newPost.save()
     res.send(dbCourse);
