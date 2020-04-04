@@ -36,23 +36,26 @@ router.post('/',multer({storage:imgStorage}).single('image'),async(req,res)=>{
         description:req.body.description,
     }
     if(req.file){
-        postObj.imagePath = req.file != undefined ?`${url}/images/${req.file.filename}`:null
+        postObj.imagePath = req.file != undefined ?`${url}/images/${req.file.filename}`:null;
 
     }
-    const newPost = new Post(postObj)
-    const dbCourse = await newPost.save()
-    res.send(dbCourse);
+    const newPost = new Post(postObj);
+    const dbCourse = await newPost.save();
+    req.io.emit('post-add', dbCourse);
+    res.status(201).send({success:true,message:'post added.'});
 });
 
-router.delete('/:id',async(req,res)=>{
-    const deleteRes = await Post.deleteOne({_id:req.params.id});
-    // const updateData = await Post.find();
-    res.send(deleteRes);
+router.delete('/:postGuid',async(req,res)=>{
+    const { postGuid } = req.params;
+    const deleteRes = await Post.deleteOne({_id:postGuid});
+    req.io.emit('post-delete', postGuid);
+    res.send({success:true, message:'post deleted.'});
 })
 
 router.patch('/:id',async(req,res)=>{
     const updatedPost = await Post.findByIdAndUpdate({_id:req.params.id},{$set:req.body},{new:true});
-    res.send(updatedPost);
+    req.io.emit('post-update', updatedPost);
+    res.send({success:true, message:'post updated.'});
 })
 
 
