@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js"
+    "start": "export DEBUG=socket.io*, NODE_ENV=3000 && node index.js",
+    "start-jenkins": "export DEBUG=socket.io* && pm2 start index.js",
+    "start-dev": "set DEBUG=socket.io* && nodemon --inspect index.js"
   },
   "author": "anurag arwalkar",
   "license": "MIT",
@@ -17,6 +19,7 @@
     "debug": "^4.1.1",
     "express": "^4.17.1",
     "mongoose": "^5.7.1",
-    "multer": "^1.4.2"
+    "multer": "^1.4.2",
+    "socket.io": "^2.3.0"
   }
 }
