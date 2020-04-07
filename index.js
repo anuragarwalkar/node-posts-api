@@ -17,7 +17,7 @@ app.use('/api/posts',posts);
 app.use('/images',images)
 
 db.once('open', function() {
-    console.log('connected to db')
+    console.log('connected to mongoDb')
 },(err)=>{
     console.log(err)
 });

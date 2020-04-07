@@ -1,0 +1,15 @@
+version: '3'
+services:
+    app:
+        container_name: docker-node-posts
+        restart: always
+        build: .
+        ports:
+            - '3000:3000'
+        # links: 
+        #     - mongo    
+    # mongo: 
+    #     container_name: docker-mongo
+    #     image: mongo
+    #     ports:
+    #         - '27018:27017'
